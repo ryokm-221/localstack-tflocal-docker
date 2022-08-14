@@ -1,0 +1,21 @@
+{
+  "name": "localstack-tflocal-docker",
+  "version": "1.0.0",
+  "description": "Mock AWS services with LocalStack on Docker and configure through Terraform.",
+  "main": "index.js",
+  "scripts": {
+    "awslocal": "docker run --rm -it -v \"$(pwd)\":/app --net=localstack_default --env AWS_ACCESS_KEY_ID=dummy --env AWS_SECRET_ACCESS_KEY=dummy --env AWS_DEFAULT_REGION=ap-northeast-1 amazon/aws-cli:2.6.1 --endpoint-url http://localstack:4566",
+    "tflocal": "docker run --rm -it -v \"$(pwd)\":/app --net localstack_default tflocal:0.2",
+    "test": "npm run awslocal -- lambda invoke --function-name func_sample --payload '{ \"Id\": \"test1\", \"Item\": \"banana\" }' --cli-binary-format raw-in-base64-out /app/result.log",
+    "build": "cd terraform && npm run tflocal -- apply -auto-approve",
+    "watch:build": "sh hot-reload.sh . \"sh sample-build.sh\"",
+    "watch:logs": "npm run awslocal -- logs tail --follow",
+    "check:logs": "npm run awslocal -- logs describe-log-groups --query logGroups[0].logGroupName"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1194.0"
+  }
+}
