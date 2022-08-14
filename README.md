@@ -1,8 +1,7 @@
 # Local AWS emulation with Terraform
 Mock AWS services with LocalStack on Docker and configure through Terraform.
 
-https://qiita.com/takapg/items/5c1ee7f8645effb9e37b
-
+See: https://zenn.dev/ry_km/articles/best-way-to-dev-lambda
 
 ## Script
 Before run following scripts, make sure to run docker!
@@ -27,3 +26,6 @@ $ docker run --rm -it -v $(pwd):/app --net=localstack_default tflocal:0.2 <any c
 ```bash
 $ docker run --rm -it -v "$(pwd)":/app --net=localstack_default --env AWS_ACCESS_KEY_ID=dummy --env AWS_SECRET_ACCESS_KEY=dummy --env AWS_DEFAULT_REGION=ap-northeast-1 amazon/aws-cli:2.6.1 --endpoint-url http://localstack:4566 lambda invoke --function-name func_sample --payload $(echo '{ "name" : "Bob" }' | base64) /app/result.log
 ```
+
+## References
+https://qiita.com/takapg/items/5c1ee7f8645effb9e37b
